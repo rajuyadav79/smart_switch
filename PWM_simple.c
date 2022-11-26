@@ -21,6 +21,7 @@
 
 int clearBit(int n, int k);
 int setBit(int n, int k);
+
 void MSDelay(unsigned int value); 
 void Delay(unsigned int value);
 
@@ -32,6 +33,7 @@ struct
     unsigned char c;
 
 } StructData;
+
 
 
 unsigned long xdata ADCdata;
@@ -99,7 +101,7 @@ void Timer0_ISR (void) interrupt 1           /*interrupt address is 0x000B */
 							/******************* calcultion code *********************/
 				}		
 			
-							if(P11==1)
+			if(P11==1)
 			{
 				key = setBit(key, 1);
 			//	Timer1_Delay(24000000,800,500);	q=0;
@@ -191,7 +193,7 @@ void main(void)
 		P14_QUASI_MODE;
 		P15_QUASI_MODE;
 		P16_QUASI_MODE;
-		P17_QUASI_MODE;
+//		P17_QUASI_MODE;
 
 		P17_INPUT_MODE;
 
@@ -245,9 +247,8 @@ void main(void)
 if(unit<0)unit=0;
 
 
-key=0;
+ key=0;
  ENABLE_ADC_AIN5;
- 
 while(1)
 		{
 
@@ -329,7 +330,7 @@ while(1)
 		
 	
 	
-				temp_disp = ADC_stable;
+//				temp_disp = ADC_stable;
 //				printf ("\n temp_disp = %ld", temp_disp);	
 			
 				
