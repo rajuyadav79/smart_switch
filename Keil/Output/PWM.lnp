@@ -1,0 +1,10 @@
+".\Output\PWM_simple.obj",
+".\Output\sys.obj",
+".\Output\delay.obj",
+".\Output\uart.obj",
+".\Output\IAP.obj",
+".\Output\eeprom.obj",
+".\Output\STARTUP.obj" 
+TO ".\Output\PWM" 
+PRINT(".\LST\PWM.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 
