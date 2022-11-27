@@ -181,8 +181,8 @@ void main(void)
 	
 	unsigned long r_phase_current_highest_sample,r_phase_current_lowest_sample;
   
-	 unsigned char max_counter=30;
-	 unsigned long temp_disp;
+	 unsigned char max_counter=50;
+//	 unsigned long temp_disp;
 	
  //   ALL_GPIO_QUASI_MODE;
 	
@@ -317,13 +317,13 @@ while(1)
 				if(ADC_stable_curent > ADC_stable_prev)													 
 				{
 						dif_value = ADC_stable_curent - ADC_stable_prev;
-						if(dif_value < 100)
+						if(dif_value < 80)
 						ADC_stable = ADC_stable_prev;
 				}
 				else if(ADC_stable_curent < ADC_stable_prev)
 				{
 					dif_value =  ADC_stable_prev - ADC_stable_curent;
-					if(dif_value < 100)
+					if(dif_value < 80)
 					ADC_stable = ADC_stable_prev;
 				} 
 				ADC_stable_prev=ADC_stable;
@@ -465,22 +465,21 @@ while(1)
 				
 				else if(final_amp >= 30.1) f_disp_amp = 30.0;
 				else ;
+		
+ 				  printf("\t\t%005.2f", final_amp);  			
+					
+
+//				printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %ld",f_disp_amp,key,unit,watt,k_watt); 
 				
- //				 f_disp_amp = final_amp; // temp testing
+//				printf("\n%d,%d,%ld",key,unit,k_watt); // this command final for kunjan bhai
 				
 				
-				printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %ld",f_disp_amp,key,unit,watt,k_watt); 
 				
-//				printf("\n%d,%d,%ld",key,unit,k_watt); 
-				
-			
-			
-			//	printf("%02d%04d%04d\n",key,unit,k_watt); 
+//				printf("%02d%04d%04d\n",key,unit,k_watt); 
 				
 			
 //				printf("\n%02d%04d%008.3f",key,unit,k_watt); printf("%005.2f", f_disp_amp); 
 
-//				printf("\t\t%005.2f", final_amp);  
 			
 			
 				
