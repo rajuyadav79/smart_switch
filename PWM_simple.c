@@ -317,13 +317,13 @@ while(1)
 				if(ADC_stable_curent > ADC_stable_prev)													 
 				{
 						dif_value = ADC_stable_curent - ADC_stable_prev;
-						if(dif_value < 80)
+						if(dif_value < 100)
 						ADC_stable = ADC_stable_prev;
 				}
 				else if(ADC_stable_curent < ADC_stable_prev)
 				{
 					dif_value =  ADC_stable_prev - ADC_stable_curent;
-					if(dif_value < 80)
+					if(dif_value < 100)
 					ADC_stable = ADC_stable_prev;
 				} 
 				ADC_stable_prev=ADC_stable;
@@ -354,122 +354,122 @@ while(1)
 			
 				final_amp = ((float)ADC_stable*(10.00))/count_gain;
 			
-				printf("\n\r\t final_amp= %0.2f", final_amp); 
+//				printf("\n\r\t final_amp= %0.2f", final_amp); 
 
 					
 		//		printf("\n Actual Amp %0.1f", final_amp); 
 
 					
 
-				if(final_amp == 0.0 ) f_disp_amp = 0;
+				//if(final_amp == 0.0 ) f_disp_amp = 0;
 
-				else if(final_amp >= 0.1 && final_amp  <=  0.5) f_disp_amp = (final_amp* (1.0520));
-				else if(final_amp >= 0.6 && final_amp  <=  1.0) f_disp_amp = (final_amp* (1.0520));
+				 if(final_amp >= 0.1 && final_amp  <=  0.5) f_disp_amp = (final_amp* (1.0000));
+				else if(final_amp >= 0.6 && final_amp  <=  1.0) f_disp_amp = (final_amp* (1.0309));
 
 					
-				else if(final_amp >= 1.1 && final_amp  <=  1.5) f_disp_amp = (final_amp* (1.0526));
-				else if(final_amp >= 1.6 && final_amp  <=  2.0) f_disp_amp = (final_amp* (1.0526));
+				else if(final_amp >= 1.1 && final_amp  <=  1.5) f_disp_amp = (final_amp* (1.2097));
+				else if(final_amp >= 1.6 && final_amp  <=  2.0) f_disp_amp = (final_amp* (1.1765));
 
-				else if(final_amp >= 2.1 && final_amp  <=  2.5) f_disp_amp = (final_amp* (1.1111));
-				else if(final_amp >= 2.6 && final_amp  <=  3.0) f_disp_amp = (final_amp* (1.1111));
+				else if(final_amp >= 2.1 && final_amp  <=  2.5) f_disp_amp = (final_amp* (1.2136));
+				else if(final_amp >= 2.6 && final_amp  <=  3.0) f_disp_amp = (final_amp* (1.1905));
 				
-				else if(final_amp >= 3.1 && final_amp  <=  3.5) f_disp_amp = (final_amp* (1.0811));
-				else if(final_amp >= 3.6 && final_amp  <=  4.0) f_disp_amp = (final_amp* (1.0811));
+				else if(final_amp >= 3.1 && final_amp  <=  3.5) f_disp_amp = (final_amp* (1.2069));
+				else if(final_amp >= 3.6 && final_amp  <=  4.0) f_disp_amp = (final_amp* (1.2195));
 				
-				else if(final_amp >= 4.1 && final_amp  <=  4.5) f_disp_amp = (final_amp* (1.1111));
-				else if(final_amp >= 4.6 && final_amp  <=  5.0) f_disp_amp = (final_amp* (1.1111));
-				
-				
-				else if(final_amp >= 5.1 && final_amp  <=  5.5) f_disp_amp = (final_amp* (1.0714));
-				else if(final_amp >= 5.6 && final_amp  <=  6.0) f_disp_amp = (final_amp* (1.0714));
+				else if(final_amp >= 4.1 && final_amp  <=  4.5) f_disp_amp = (final_amp* (1.1688));
+				else if(final_amp >= 4.6 && final_amp  <=  5.0) f_disp_amp = (final_amp* (1.1468));
 				
 				
-				else if(final_amp >= 6.1 && final_amp  <=  6.5) f_disp_amp = (final_amp* (1.0294));
-				else if(final_amp >= 6.6 && final_amp  <=  7.0) f_disp_amp = (final_amp* (1.0294));
+				else if(final_amp >= 5.1 && final_amp  <=  5.5) f_disp_amp = (final_amp* (1.1270));
+				else if(final_amp >= 5.6 && final_amp  <=  6.0) f_disp_amp = (final_amp* (1.1257));
 				
 				
-				else if(final_amp >= 7.1 && final_amp  <=  7.5) f_disp_amp = (final_amp* (1.0127));
-				else if(final_amp >= 7.6 && final_amp  <=  8.0) f_disp_amp = (final_amp* (1.0127));
+				else if(final_amp >= 6.1 && final_amp  <=  6.5) f_disp_amp = (final_amp* (1.1149));
+				else if(final_amp >= 6.6 && final_amp  <=  7.0) f_disp_amp = (final_amp* (1.0819));
 				
 				
-				else if(final_amp >= 8.1 && final_amp  <=  8.5) f_disp_amp = (final_amp* (1.0112));
-				else if(final_amp >= 8.6 && final_amp  <= 9.0) f_disp_amp = (final_amp* (1.0112));
+				else if(final_amp >= 7.1 && final_amp  <=  7.5) f_disp_amp = (final_amp* (1.0838));
+				else if(final_amp >= 7.6 && final_amp  <=  8.0) f_disp_amp = (final_amp* (1.0652));
 				
-				else if(final_amp >= 9.1 && final_amp  <= 9.5) f_disp_amp = (final_amp* (1.0000));
+				
+				else if(final_amp >= 8.1 && final_amp  <=  8.5) f_disp_amp = (final_amp* (1.0612));
+				else if(final_amp >= 8.6 && final_amp  <= 9.0) f_disp_amp = (final_amp* (1.0274));
+				
+				else if(final_amp >= 9.1 && final_amp  <= 9.5) f_disp_amp = (final_amp* (1.0248));
 				else if(final_amp >= 9.6 && final_amp  <= 10.0) f_disp_amp = (final_amp* (1.0000));
 				
-				else if(final_amp >= 10.1 && final_amp <= 10.5) f_disp_amp = (final_amp* (1.0185));
-				else if(final_amp >= 10.6 && final_amp <= 11.0) f_disp_amp = (final_amp* (1.0185));
+				else if(final_amp >= 10.1 && final_amp <= 10.5) f_disp_amp = (final_amp* (1.0077));
+				else if(final_amp >= 10.6 && final_amp <= 11.0) f_disp_amp = (final_amp* (1.0036));
 				
-				else if(final_amp >= 11.1 && final_amp <= 11.5) f_disp_amp = (final_amp* (1.0084));
-				else if(final_amp >= 11.6 && final_amp <= 12.0) f_disp_amp = (final_amp* (1.0084));
+				else if(final_amp >= 11.1 && final_amp <= 11.5) f_disp_amp = (final_amp* (0.9991));
+				else if(final_amp >= 11.6 && final_amp <= 12.0) f_disp_amp = (final_amp* (0.9961));
 				
-				else if(final_amp >= 12.1 && final_amp <= 12.5) f_disp_amp = (final_amp* (0.9924));
-				else if(final_amp >= 12.6 && final_amp <= 13.0) f_disp_amp = (final_amp* (0.9924));
+				else if(final_amp >= 12.1 && final_amp <= 12.5) f_disp_amp = (final_amp* (0.9850));
+				else if(final_amp >= 12.6 && final_amp <= 13.0) f_disp_amp = (final_amp* (0.9893));
 				
-				else if(final_amp >= 13.1 && final_amp <= 13.5) f_disp_amp = (final_amp* (0.9722));
-				else if(final_amp >= 13.6 && final_amp <= 14.0) f_disp_amp = (final_amp* (0.9722));
+				else if(final_amp >= 13.1 && final_amp <= 13.5) f_disp_amp = (final_amp* (0.9783));
+				else if(final_amp >= 13.6 && final_amp <= 14.0) f_disp_amp = (final_amp* (0.9777));
 				
-				else if(final_amp >= 14.1 && final_amp <= 14.5) f_disp_amp = (final_amp* (0.9554));
-				else if(final_amp >= 14.6 && final_amp <= 15.0) f_disp_amp = (final_amp* (0.9554));
+				else if(final_amp >= 14.1 && final_amp <= 14.5) f_disp_amp = (final_amp* (0.9693));
+				else if(final_amp >= 14.6 && final_amp <= 15.0) f_disp_amp = (final_amp* (0.9721));
 				
 				
-				else if(final_amp >= 15.1 && final_amp <= 15.5) f_disp_amp = (final_amp* (0.8989));
-				else if(final_amp >= 15.6 && final_amp <= 16.0) f_disp_amp = (final_amp* (0.8989));
+				else if(final_amp >= 15.1 && final_amp <= 15.5) f_disp_amp = (final_amp* (0.9663));
+				else if(final_amp >= 15.6 && final_amp <= 16.0) f_disp_amp = (final_amp* (0.9633));
 
 
-				else if(final_amp >= 16.1 && final_amp <= 16.5) f_disp_amp = (final_amp* (0.9043));
-				else if(final_amp >= 16.6 && final_amp <= 17.0) f_disp_amp = (final_amp* (0.9043));
+				else if(final_amp >= 16.1 && final_amp <= 16.5) f_disp_amp = (final_amp* (0.9655));
+				else if(final_amp >= 16.6 && final_amp <= 17.0) f_disp_amp = (final_amp* (0.9610));
 				
-				else if(final_amp >= 17.1 && final_amp <= 17.5) f_disp_amp = (final_amp* (0.8955));
-				else if(final_amp >= 17.6 && final_amp <= 18.0) f_disp_amp = (final_amp* (0.8955));
+				else if(final_amp >= 17.1 && final_amp <= 17.5) f_disp_amp = (final_amp* (0.9631));
+				else if(final_amp >= 17.6 && final_amp <= 18.0) f_disp_amp = (final_amp* (0.9585));
 
-				else if(final_amp >= 18.1 && final_amp <= 18.5) f_disp_amp = (final_amp* (0.8716));
-				else if(final_amp >= 18.6 && final_amp <= 19.0) f_disp_amp = (final_amp* (0.8716));
+				else if(final_amp >= 18.1 && final_amp <= 18.5) f_disp_amp = (final_amp* (0.9590));
+				else if(final_amp >= 18.6 && final_amp <= 19.0) f_disp_amp = (final_amp* (0.9601));
 
-				else if(final_amp >= 19.1 && final_amp <= 19.5) f_disp_amp = (final_amp* (0.8658));
-				else if(final_amp >= 19.6 && final_amp <= 20.0) f_disp_amp = (final_amp* (0.8658));
+				else if(final_amp >= 19.1 && final_amp <= 19.5) f_disp_amp = (final_amp* (0.9452));
+				else if(final_amp >= 19.6 && final_amp <= 20.0) f_disp_amp = (final_amp* (0.9421));
 
-				else if(final_amp >= 20.1 && final_amp <= 20.5) f_disp_amp = (final_amp* (0.8750));
+				else if(final_amp >= 20.1 && final_amp <= 20.5) f_disp_amp = (final_amp* (0.9352));
 				else if(final_amp >= 20.6 && final_amp <= 21.0) f_disp_amp = (final_amp* (0.8750));
 
 				else if(final_amp >= 21.1 && final_amp <= 21.5) f_disp_amp = (final_amp* (0.8661));
 				else if(final_amp >= 21.6 && final_amp <= 22.0) f_disp_amp = (final_amp* (0.8661));
 
 
-				else if(final_amp >= 22.1 && final_amp <= 22.5) f_disp_amp = (final_amp* (0.8779));
-				else if(final_amp >= 22.6 && final_amp <= 23.0) f_disp_amp = (final_amp* (0.8779));
+//				else if(final_amp >= 22.1 && final_amp <= 22.5) f_disp_amp = (final_amp* (0.8779));
+//				else if(final_amp >= 22.6 && final_amp <= 23.0) f_disp_amp = (final_amp* (0.8779));
 
 
-				else if(final_amp >= 23.1 && final_amp <= 23.5) f_disp_amp = (final_amp* (0.8779));
-				else if(final_amp >= 23.6 && final_amp <= 24.0) f_disp_amp = (final_amp* (0.8779));
+//				else if(final_amp >= 23.1 && final_amp <= 23.5) f_disp_amp = (final_amp* (0.8779));
+//				else if(final_amp >= 23.6 && final_amp <= 24.0) f_disp_amp = (final_amp* (0.8779));
 
-				else if(final_amp >= 24.1 && final_amp <= 24.5) f_disp_amp = (final_amp* (0.8889));
-				else if(final_amp >= 24.6 && final_amp <= 25.0) f_disp_amp = (final_amp* (0.8889));
-				
-				else if(final_amp >= 25.1 && final_amp <= 25.5) f_disp_amp = (final_amp* (0.8889));
-				else if(final_amp >= 25.6 && final_amp <= 26.0) f_disp_amp = (final_amp* (0.8889));
-				
-				else if(final_amp >= 26.1 && final_amp <= 26.5) f_disp_amp = (final_amp* (0.8889));
-				else if(final_amp >= 26.6 && final_amp <= 27.0) f_disp_amp = (final_amp* (0.8889));
-				
-				else if(final_amp >= 27.1 && final_amp <= 27.5) f_disp_amp = (final_amp* (0.8889));
-				else if(final_amp >= 27.6 && final_amp <= 28.0) f_disp_amp = (final_amp* (0.8889));
-				
-				else if(final_amp >= 28.1 && final_amp <= 28.5) f_disp_amp = (final_amp* (0.8889));
-				else if(final_amp >= 28.6 && final_amp <= 29.0) f_disp_amp = (final_amp* (0.8889));
-				
-				
-				else if(final_amp >= 29.1 && final_amp <= 29.5) f_disp_amp = (final_amp* (0.8889));
-				else if(final_amp >= 29.6 && final_amp <= 30.0) f_disp_amp = (final_amp* (0.8889));
-				
-				else if(final_amp >= 30.1) f_disp_amp = 30.0;
-				else ;
+//				else if(final_amp >= 24.1 && final_amp <= 24.5) f_disp_amp = (final_amp* (0.8889));
+//				else if(final_amp >= 24.6 && final_amp <= 25.0) f_disp_amp = (final_amp* (0.8889));
+//				
+//				else if(final_amp >= 25.1 && final_amp <= 25.5) f_disp_amp = (final_amp* (0.8889));
+//				else if(final_amp >= 25.6 && final_amp <= 26.0) f_disp_amp = (final_amp* (0.8889));
+//				
+//				else if(final_amp >= 26.1 && final_amp <= 26.5) f_disp_amp = (final_amp* (0.8889));
+//				else if(final_amp >= 26.6 && final_amp <= 27.0) f_disp_amp = (final_amp* (0.8889));
+//				
+//				else if(final_amp >= 27.1 && final_amp <= 27.5) f_disp_amp = (final_amp* (0.8889));
+//				else if(final_amp >= 27.6 && final_amp <= 28.0) f_disp_amp = (final_amp* (0.8889));
+//				
+//				else if(final_amp >= 28.1 && final_amp <= 28.5) f_disp_amp = (final_amp* (0.8889));
+//				else if(final_amp >= 28.6 && final_amp <= 29.0) f_disp_amp = (final_amp* (0.8889));
+//				
+//				
+//				else if(final_amp >= 29.1 && final_amp <= 29.5) f_disp_amp = (final_amp* (0.8889));
+//				else if(final_amp >= 29.6 && final_amp <= 30.0) f_disp_amp = (final_amp* (0.8889));
+//				
+//				else if(final_amp >= 30.1) f_disp_amp = 30.0;
+				else f_disp_amp = (final_amp* (1));
 		
- 				  printf("\t\t%005.2f", final_amp);  			
+// 				  printf("\t\t%005.2f", f_disp_amp);  			
 					
 
-//				printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %ld",f_disp_amp,key,unit,watt,k_watt); 
+				printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %ld",f_disp_amp,key,unit,watt,k_watt); 
 				
 //				printf("\n%d,%d,%ld",key,unit,k_watt); // this command final for kunjan bhai
 				
