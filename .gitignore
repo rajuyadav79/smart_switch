@@ -1,5 +1,7 @@
 Keil/
 Library/
+Keil/LST/*.*
+
 # Prerequisites
 *.d
 
