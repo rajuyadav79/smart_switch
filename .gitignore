@@ -1,6 +1,12 @@
 # A .gitignore for Keil projects.
 # Taken mostly from http://www.keil.com/support/man/docs/uv4/uv4_b_filetypes.htm
 
+
+
+
+# remove keil folder
+Keil/
+
 # User-specific uVision files
 *.opt
 *.uvopt
@@ -132,22 +138,3 @@ Mkfile.old
 dkms.conf
 
 
-Keil/LST/*.*
-Keil/Output/PWM
-Keil/Output/*.*
-Keil/Output/
-Keil/Output/
-Keil/Output/PWM
-Keil/LST/PWM.m51
-Keil/Output/PWM.build_log.htm
-
-Keil\LST\*.*
-Keil\Output\PWM
-Keil\Output\*.*
-Keil\Output\
-Keil\Output\
-Keil\Output\PWM
-Keil\LST\PWM.m51
-Keil\Output\PWM.build_log.htm
-
-Keil\LST\PWM.m51
