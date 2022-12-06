@@ -140,3 +140,14 @@ Keil/Output/
 Keil/Output/PWM
 Keil/LST/PWM.m51
 Keil/Output/PWM.build_log.htm
+
+Keil\LST\*.*
+Keil\Output\PWM
+Keil\Output\*.*
+Keil\Output\
+Keil\Output\
+Keil\Output\PWM
+Keil\LST\PWM.m51
+Keil\Output\PWM.build_log.htm
+
+Keil\LST\PWM.m51
