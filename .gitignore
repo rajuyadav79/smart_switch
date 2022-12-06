@@ -132,3 +132,8 @@ Mkfile.old
 dkms.conf
 
 
+Keil/LST/*.*
+Keil/Output/PWM
+Keil/Output/*.*
+Keil/Output/
+Keil/Output/
