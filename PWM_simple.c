@@ -50,6 +50,8 @@ float xdata final_amp;
 float xdata f_disp_amp;
 float xdata k_watt;
 
+
+
 unsigned char i;
 unsigned int counter_ms=0;
 unsigned int counter_sec=0;
@@ -88,7 +90,7 @@ void Timer0_ISR (void) interrupt 1           /*interrupt address is 0x000B */
 							watt += (230 * f_disp_amp);
 							temp_watt = watt;
 					
-								k_watt = (230 * (float)f_disp_amp)/1000;  //k_watt = (float)temp_watt/1000;
+							k_watt = (230 * f_disp_amp)/1000;  //k_watt = (float)temp_watt/1000;
 					
 						//	watt_1=watt;
 							// printf("\t\t\n unit=%ld ,watt=%ld",unit,watt); 
@@ -249,6 +251,7 @@ if(unit<0)unit=0;
 
  key=0;
  ENABLE_ADC_AIN5;
+ watt=0;k_watt=0;
 while(1)
 		{
 
@@ -257,8 +260,8 @@ while(1)
 			
 	 for(t=0;t<max_counter;t++)
     {  
-      r_phase_c_max_sample = 512;
-      r_phase_c_min_sample = 512;
+      r_phase_c_max_sample = 100;
+      r_phase_c_min_sample = 100;
 
 			for(j=0;j<250;j++)
 			 {
@@ -342,7 +345,6 @@ while(1)
 								Write_DATAFLASH_ARRAY(0x38FE,(unsigned char *)&StructData,sizeof(StructData));//write structure
 								/***************data write in iap ******************************/				
 								//printf("\n\r\t count_gain1= %ld", count_gain); 
-
 					}	
 
 //				printf("\n\r\t ADC_stable=%u", ADC_stable); 
@@ -469,7 +471,7 @@ while(1)
 // 				  printf("\t\t%005.2f", f_disp_amp);  			
 					
 
-				printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %ld",f_disp_amp,key,unit,watt,k_watt); 
+				printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %f",f_disp_amp,key,unit,watt,k_watt); 
 				
 //				printf("\n%d,%d,%ld",key,unit,k_watt); // this command final for kunjan bhai
 				
