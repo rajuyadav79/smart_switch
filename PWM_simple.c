@@ -471,7 +471,7 @@ while(1)
 // 				  printf("\t\t%005.2f", f_disp_amp);  			
 					
 
-				printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %f",f_disp_amp,key,unit,watt,k_watt); 
+			//	printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %f",f_disp_amp,key,unit,watt,k_watt); 
 				
 //				printf("\n%d,%d,%ld",key,unit,k_watt); // this command final for kunjan bhai
 				
@@ -480,7 +480,7 @@ while(1)
 //				printf("%02d%04d%04d\n",key,unit,k_watt); 
 				
 			
-//				printf("\n%02d%04d%008.3f",key,unit,k_watt); printf("%005.2f", f_disp_amp); 
+				printf("\n%02d%04d%008.3f",key,unit,k_watt); printf("%005.2f", f_disp_amp); 
 
 			
 			
