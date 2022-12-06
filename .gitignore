@@ -6,6 +6,8 @@
 
 # remove keil folder
 Keil/
+Keil/LST/
+Keil/Output/
 
 # User-specific uVision files
 *.opt
