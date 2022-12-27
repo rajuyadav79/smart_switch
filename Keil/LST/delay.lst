@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   DELAY                                                             11/28/2022 16:47:18 PAGE 1   
+C51 COMPILER V9.56.0.0   DELAY                                                             12/26/2022 20:27:53 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DELAY
@@ -62,7 +62,7 @@ line level    source
   43   2            clr_TCON_TF0;
   44   2            clr_TCON_TR0;                       //Stop Timer0
   45   2            u16CNT --;
-C51 COMPILER V9.56.0.0   DELAY                                                             11/28/2022 16:47:18 PAGE 2   
+C51 COMPILER V9.56.0.0   DELAY                                                             12/26/2022 20:27:53 PAGE 2   
 
   46   2          }
   47   1      //    clr_TCON_TR0;                                     //Stop Timer0
@@ -126,7 +126,7 @@ line level    source
  101   1          unsigned char TL2TMP,TH2TMP;
  102   1        
  103   1          SFRS = 0x00;
-C51 COMPILER V9.56.0.0   DELAY                                                             11/28/2022 16:47:18 PAGE 3   
+C51 COMPILER V9.56.0.0   DELAY                                                             12/26/2022 20:27:53 PAGE 3   
 
  104   1          switch (u16TMDIV)
  105   1          {
@@ -190,7 +190,7 @@ line level    source
  159   2            case 64:T3CON&=0xF8;T3CON|=0x06; break;
  160   2            case 128:T3CON&=0xF8;T3CON|=0x07; break;
  161   2          }
-C51 COMPILER V9.56.0.0   DELAY                                                             11/28/2022 16:47:18 PAGE 4   
+C51 COMPILER V9.56.0.0   DELAY                                                             12/26/2022 20:27:53 PAGE 4   
 
  162   1          TL3TMP = LOBYTE(65536-((u32SYSCLK/1000000)*u32DLYUnit/u8TMDIV));
  163   1          TH3TMP = HIBYTE(65536-((u32SYSCLK/1000000)*u32DLYUnit/u8TMDIV));

@@ -1,5 +1,7 @@
 ///* if define TIMER0_FSYS_DIV12, timer = (0x1FFF-0x1000)*12/24MHz = 4.08ms */
+
 ///* if define TIMER0_FSYS, timer = (0x1FFF-0x0010)/24MHz = 340us */
+
 //#define TH0_INIT        0x00 
 //#define TL0_INIT        0x10
 
@@ -28,12 +30,16 @@ void Delay(unsigned int value);
 struct
 {
     unsigned int a;
-		unsigned int z;
-    unsigned long b;
+		unsigned int b;
+	
+		unsigned int d;
+//		unsigned int e;
+	
+	//	unsigned long x;
+	
     unsigned char c;
 
 } StructData;
-
 
 
 unsigned long xdata ADCdata;
@@ -56,6 +62,7 @@ unsigned char i;
 unsigned int counter_ms=0;
 unsigned int counter_sec=0;
 unsigned int counter_min;
+
 unsigned int key=0;
 
 unsigned long watt,temp_watt;
@@ -68,7 +75,7 @@ unsigned int Final_current;
 *    TIMER 0 interrupt subroutine
 ************************************************************************************************************/
 
-
+bit counter_min_update;
 	
 void Timer0_ISR (void) interrupt 1           /*interrupt address is 0x000B */
 {
@@ -81,24 +88,38 @@ void Timer0_ISR (void) interrupt 1           /*interrupt address is 0x000B */
 			{
 				i=0;
 				counter_ms++;
+				
 				if(counter_ms>1000)
 				{
-						counter_ms=0; //P12 = ~P12;    // GPIO1 toggle when interrup
+					counter_ms=0; //P12 = ~P12;    // GPIO1 toggle when interrup
+				
+					counter_sec++;
+					if(counter_sec > 60) //if(counter_sec > 1800) // MIN 30 60*30
+					 {
+							counter_sec=0;
+							counter_min_update=1;
+					 }
+					
 //						watt += 230 * f_disp_amp;
 //							if(watt>60000){unit++; watt=0;}
 				
 							watt += (230 * f_disp_amp);
+							
 							temp_watt = watt;
 					
 							k_watt = (230 * f_disp_amp)/1000;  //k_watt = (float)temp_watt/1000;
 					
-						//	watt_1=watt;
-							// printf("\t\t\n unit=%ld ,watt=%ld",unit,watt); 
-							if(watt>3600000)
+					
+						//	 printf("\t\t\n unit=%ld ,watt=%ld",unit,watt); 
+						
+							// unit watts second
+					
+					   
+					   if(watt>3600000)
 								{
 									unit++; watt=watt-3600000; unit_update=1;
 								}
-						 
+						 		
 							//	printf("\t\t counter_ms=%d ,counter_sec=%d",counter_ms,counter_sec); 
 							/******************* calcultion code *********************/
 				}		
@@ -176,6 +197,21 @@ int clearBit(int n, int k)
 }
 
 
+
+void delay1(unsigned int i)
+{
+ 	 unsigned char j;
+	 while(i > 0)
+	 {
+	    for(j=0;j<5;j++);
+		i--;
+	 }
+}
+
+
+unsigned int a,b;
+unsigned long c;
+
 void main(void)
 {
 	 unsigned char t,j;
@@ -218,12 +254,15 @@ void main(void)
 		P01_QUASI_MODE;
 		
 /******************************** timer 0 *************************/
-    ENABLE_TIMER0_MODE2;
-    TIMER0_FSYS;
   
+    
     TH0 = TH0_INIT;            //initial counter values 
     TL0 = TL0_INIT;    
    
+		TIMER0_FSYS;
+    ENABLE_TIMER0_MODE2;
+		
+		
     ENABLE_TIMER0_INTERRUPT;                       //enable Timer0 interrupt
     ENABLE_GLOBAL_INTERRUPT;                       //enable interrupts
   
@@ -241,63 +280,111 @@ void main(void)
 		
 		unit = ((read_APROM_BYTE(0x39FE)<<8)+read_APROM_BYTE(0x39FF));
 
+//		watt = ((read_APROM_BYTE(0x42FD)<<16)+(read_APROM_BYTE(0x42FE)<<8)+read_APROM_BYTE(0x42FF));
+
+		//if(watt>3600000) watt = 0;
+		
 //		printf ("\n system16highsite = 0x%X", system16highsite);
 
-		printf ("\n count_gain = %ld", count_gain);
-		printf ("\n unit = %ld", unit);
+//		printf ("\n count_gain = %ld", count_gain);
+//		printf ("\n unit = %ld", unit);
 
 if(unit<0)unit=0;
 
 
  key=0;
  ENABLE_ADC_AIN5;
- watt=0;k_watt=0;
+ k_watt=0;
+ 
+ 
+			a = ((read_APROM_BYTE(0x3800)<<8)+read_APROM_BYTE(0x3801));
+			b = ((read_APROM_BYTE(0x3802)<<8)+read_APROM_BYTE(0x3803));
+
+			//printf("\t\t\n write2 watt=%ld ",ADC_stable); 
+			//printf("\t\t\n write2 watt=%ld ",count_gain); 
+	
+			c = b*100000 + a;
+			watt = c;
+			printf("\t\t\n write3 watt=%ld ",c); 
+			
+									
+									
+									
+//									a= ADC_stable%10000;
+//									b= ADC_stable/10000;
+//									
+//									printf("\t\t\n write1 watt=%ld ",ADC_stable); 
+//									
+//									
+//									
+//									StructData.a=a;
+//									Write_DATAFLASH_ARRAY(0x3800,(unsigned char *)&StructData,sizeof(StructData));//write structure
+//								
+//									StructData.a=b;
+//									
+//									Write_DATAFLASH_ARRAY(0x3802,(unsigned char *)&StructData,sizeof(StructData));//write structure
+
+//									delay1(100);
+//									
+//									ADC_stable = ((read_APROM_BYTE(0x3800)<<8)+read_APROM_BYTE(0x3801));
+
+//									printf("\t\t\n write2 watt=%ld ",ADC_stable); 
+//									
+//									count_gain = ((read_APROM_BYTE(0x3802)<<8)+read_APROM_BYTE(0x3803));
+//									
+//									printf("\t\t\n write2 watt=%ld ",count_gain); 
+//							
+//							
+//									count_gain = count_gain*10000 + ADC_stable;
+//									printf("\t\t\n write3 watt=%ld ",count_gain); 
+
+if(unit==-1)unit=0;
 while(1)
 		{
-
+	
 				r_phase_current_highest_sample = 0;
         r_phase_current_lowest_sample = 0;
 			
-	 for(t=0;t<max_counter;t++)
-    {  
-      r_phase_c_max_sample = 100;
-      r_phase_c_min_sample = 100;
+				 for(t=0;t<max_counter;t++)
+					{  
+						r_phase_c_max_sample = 100;
+						r_phase_c_min_sample = 100;
 
-			for(j=0;j<250;j++)
-			 {
-						/*Enable channel 5 */
-						ADCRH=0;
-						ADCRL=0;	
-						ADCCON1|=0X30;            /* clock divider */
-						ADCCON2|=0X0E;            /* AQT time */
-						AUXR1|=SET_BIT4;          /* ADC clock low speed */
-						clr_ADCCON0_ADCF;
-						set_ADCCON0_ADCS;                                
-						while(ADCF == 0);
-						ADCdataAIN5H = ADCRH;
-						ADCdataAIN5L = ADCRL;
+						for(j=0;j<250;j++)
+						 {
+									/*Enable channel 5 */
+									ADCRH=0;
+									ADCRL=0;	
+									ADCCON1|=0X30;            /* clock divider */
+									ADCCON2|=0X0E;            /* AQT time */
+									AUXR1|=SET_BIT4;          /* ADC clock low speed */
+									clr_ADCCON0_ADCF;
+									set_ADCCON0_ADCS;                                
+									while(ADCF == 0);
+									ADCdataAIN5H = ADCRH;
+									ADCdataAIN5L = ADCRL;
 
-						s1 = ADCdataAIN5H * 256 + ADCdataAIN5L;
- 
-				if(s1>r_phase_c_max_sample)r_phase_c_max_sample = s1;
+									s1 = ADCdataAIN5H * 256 + ADCdataAIN5L;
+			 
+							if(s1>r_phase_c_max_sample)r_phase_c_max_sample = s1;
+							
+							if(s1<r_phase_c_min_sample)r_phase_c_min_sample = s1;
+						
+								Delay(5);
+						 }
+							 Delay(1);
+							
+							r_phase_current_highest_sample = r_phase_current_highest_sample + r_phase_c_max_sample;
+							r_phase_current_lowest_sample  = r_phase_current_lowest_sample  + r_phase_c_min_sample;
+					
+					}			 
+		
+		
+					r_phase_current_highest_sample = r_phase_current_highest_sample / max_counter;
+					r_phase_current_lowest_sample = r_phase_current_lowest_sample / max_counter;
 				
-        if(s1<r_phase_c_min_sample)r_phase_c_min_sample = s1;
-			
-					Delay(5);
-			 }
-		     Delay(1);
-			  
-				r_phase_current_highest_sample = r_phase_current_highest_sample + r_phase_c_max_sample;
-        r_phase_current_lowest_sample  = r_phase_current_lowest_sample  + r_phase_c_min_sample;
-		
-		}			 
-		
-		
-				r_phase_current_highest_sample = r_phase_current_highest_sample / max_counter;
-				r_phase_current_lowest_sample = r_phase_current_lowest_sample / max_counter;
-			
-				Final_current = (r_phase_current_highest_sample -  r_phase_current_lowest_sample);
-				
+					Final_current = (r_phase_current_highest_sample -  r_phase_current_lowest_sample);
+					
 			
 //		temp_disp = r_phase_current_highest_sample;
 //				printf ("\n\nr_phase_current_highest_sample = %ld", temp_disp);	
@@ -337,15 +424,8 @@ while(1)
 //				printf ("\n temp_disp = %ld", temp_disp);	
 			
 				
-				
-				if(P05==0)
-					{	
-								count_gain = ADC_stable;
-								StructData.a=ADC_stable;
-								Write_DATAFLASH_ARRAY(0x38FE,(unsigned char *)&StructData,sizeof(StructData));//write structure
-								/***************data write in iap ******************************/				
-								//printf("\n\r\t count_gain1= %ld", count_gain); 
-					}	
+					
+			
 
 //				printf("\n\r\t ADC_stable=%u", ADC_stable); 
 //				final_amp = (ADC_stable*0.0108);
@@ -354,7 +434,7 @@ while(1)
 
 					
 			
-				final_amp = ((float)ADC_stable*(10.00))/count_gain;
+					final_amp = ((float)ADC_stable*(10.00))/count_gain;
 			
 //				printf("\n\r\t final_amp= %0.2f", final_amp); 
 
@@ -438,63 +518,96 @@ while(1)
 				else if(final_amp >= 21.1 && final_amp <= 21.5) f_disp_amp = (final_amp* (0.8661));
 				else if(final_amp >= 21.6 && final_amp <= 22.0) f_disp_amp = (final_amp* (0.8661));
 
-
-//				else if(final_amp >= 22.1 && final_amp <= 22.5) f_disp_amp = (final_amp* (0.8779));
-//				else if(final_amp >= 22.6 && final_amp <= 23.0) f_disp_amp = (final_amp* (0.8779));
-
-
-//				else if(final_amp >= 23.1 && final_amp <= 23.5) f_disp_amp = (final_amp* (0.8779));
-//				else if(final_amp >= 23.6 && final_amp <= 24.0) f_disp_amp = (final_amp* (0.8779));
-
-//				else if(final_amp >= 24.1 && final_amp <= 24.5) f_disp_amp = (final_amp* (0.8889));
-//				else if(final_amp >= 24.6 && final_amp <= 25.0) f_disp_amp = (final_amp* (0.8889));
-//				
-//				else if(final_amp >= 25.1 && final_amp <= 25.5) f_disp_amp = (final_amp* (0.8889));
-//				else if(final_amp >= 25.6 && final_amp <= 26.0) f_disp_amp = (final_amp* (0.8889));
-//				
-//				else if(final_amp >= 26.1 && final_amp <= 26.5) f_disp_amp = (final_amp* (0.8889));
-//				else if(final_amp >= 26.6 && final_amp <= 27.0) f_disp_amp = (final_amp* (0.8889));
-//				
-//				else if(final_amp >= 27.1 && final_amp <= 27.5) f_disp_amp = (final_amp* (0.8889));
-//				else if(final_amp >= 27.6 && final_amp <= 28.0) f_disp_amp = (final_amp* (0.8889));
-//				
-//				else if(final_amp >= 28.1 && final_amp <= 28.5) f_disp_amp = (final_amp* (0.8889));
-//				else if(final_amp >= 28.6 && final_amp <= 29.0) f_disp_amp = (final_amp* (0.8889));
-//				
-//				
-//				else if(final_amp >= 29.1 && final_amp <= 29.5) f_disp_amp = (final_amp* (0.8889));
-//				else if(final_amp >= 29.6 && final_amp <= 30.0) f_disp_amp = (final_amp* (0.8889));
-//				
-//				else if(final_amp >= 30.1) f_disp_amp = 30.0;
 				else f_disp_amp = (final_amp* (1));
-		
-// 				  printf("\t\t%005.2f", f_disp_amp);  			
-					
+	
+			//  printf("\t\t%005.2f", f_disp_amp);  			
 
 			//	printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %f",f_disp_amp,key,unit,watt,k_watt); 
 				
-//				printf("\n%d,%d,%ld",key,unit,k_watt); // this command final for kunjan bhai
+			//	printf("\n%d,%d,%ld",key,unit,k_watt); // this command final for kunjan bhai
 				
 				
 				
-//				printf("%02d%04d%04d\n",key,unit,k_watt); 
+				//printf("%02d%04d%04d\n",key,unit,k_watt);
+										
+				printf("\n%ld",temp_watt);
+	
+			c = temp_watt;	
+									b= c%10000;
+									a= c/10000;
+						
+				printf("\n%d%d",a,b); delay1(10);
 				
-			
-				printf("\n%02d%04d%008.3f",key,unit,k_watt); printf("%005.2f", f_disp_amp); 
+//				printf("\n\r%02d%04d%006.3f",key,unit,k_watt);	//printf("%005.2f",f_disp_amp); 
+//				printf("%005.2f",f_disp_amp); 
+				
+				
+									
+				
+			//	
+				
+					if(P05==0)
+						{	
+								  clr_TCON_TR0;                       //Stop Timer0
+									count_gain = ADC_stable;
+									StructData.a=ADC_stable;
+									Write_DATAFLASH_ARRAY(0x38FE,(unsigned char *)&StructData,sizeof(StructData));//write structure
+									/***************data write in iap ******************************/				
+									//printf("\n\r\t count_gain1= %ld", count_gain); 
+									watt=0;
+									printf("\n DONE ");	delay1(1000);
+ 								set_TCON_TR0;                       //start Timer0
+							
+									while(P05==0);
+							
+						}	
 
 			
-			
-				
-				//Timer1_Delay(24000000,5000,500);
-					
-					if(unit_update==1)
+	
+				if(unit_update==1)
 					{	unit_update=0;
-						StructData.z=unit;
+						//  clr_TCON_TR0;                       //Stop Timer0
+						StructData.b = unit;
 						Write_DATAFLASH_ARRAY(0x39FE,(unsigned char *)&StructData,sizeof(StructData));//write structure
+					//   set_TCON_TR0;                       //start Timer0
 					}
 	
-			
-			
+					
+					
+					if(counter_min_update==1)
+					{
+						counter_min_update=0;
+						//printf("\n\r watt=%ld",temp_watt); 
+						//  clr_TCON_TR0;                       //Stop Timer0
+									a= temp_watt%100000;
+									b= temp_watt/100000;
+									
+									StructData.a=a;
+									Write_DATAFLASH_ARRAY(0x3800,(unsigned char *)&StructData,sizeof(StructData));//write structure
+								
+									StructData.a=b;
+									
+									Write_DATAFLASH_ARRAY(0x3802,(unsigned char *)&StructData,sizeof(StructData));//write structure
+									delay1(100);
+									
+//									a = ((read_APROM_BYTE(0x3800)<<8)+read_APROM_BYTE(0x3801));
+//									b = ((read_APROM_BYTE(0x3802)<<8)+read_APROM_BYTE(0x3803));
+
+//									//printf("\t\t\n write2 watt=%ld ",ADC_stable); 
+//									//printf("\t\t\n write2 watt=%ld ",count_gain); 
+//							
+//									c = b*100000 + a;
+//									printf("\t\t\n write3 watt=%ld ",c); 
+					//					set_TCON_TR0;                       //start Timer0
+						
+					}
+					
+					
+									
+	
+
+					
+					
 			
 //			printf("\n\r\t ADc_count=%u", ADCcount);
 //			unsigned long accurate_adc_count,adc_count;
