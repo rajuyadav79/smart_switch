@@ -17,8 +17,9 @@
 *    Main function 
 ************************************************************************************************************/
 
-#define TH0_INIT        0x1A 
-#define TL0_INIT        0x37
+#define TH0_INIT        56 
+#define TL0_INIT        56
+
 
 int clearBit(int n, int k);
 int setBit(int n, int k);
@@ -56,6 +57,12 @@ float xdata f_disp_amp;
 float xdata k_watt;
 
 
+
+unsigned char i;
+unsigned int counter_ms=0;
+unsigned int counter_sec=0;
+unsigned int counter_min;
+
 unsigned int key=0;
 
 unsigned long watt,temp_watt;
@@ -69,32 +76,30 @@ unsigned int Final_current;
 ************************************************************************************************************/
 
 bit counter_min_update;
-unsigned char value;	
-unsigned char sec,min;
-
+	
 void Timer0_ISR (void) interrupt 1           /*interrupt address is 0x000B */
 {
     _push_(SFRS);
-			TH0 = TH0_INIT;
-			TL0 = TL0_INIT;    
-			TF0 = 0;
-
-			value++;
-			if(value>27)
+//    TH0 = TH0_INIT;
+//    TL0 = TL0_INIT;
+//    TF0 = 0 ;
+			i++;
+			if(i>120)
 			{
-					value=0;
-					sec++;
-					if(sec > 59) //if(counter_sec > 1800) // MIN 30 60*30
+				i=0;
+				counter_ms++;
+				
+				if(counter_ms>1000)
+				{
+					counter_ms=0; //P12 = ~P12;    // GPIO1 toggle when interrup
+				
+					counter_sec++;
+					if(counter_sec > 60) //if(counter_sec > 1800) // MIN 30 60*30
 					 {
-							sec=0;
-							min++;
-							if(min > 15) //if(counter_sec > 1800) // MIN 30 60*30
-							 {
-								 min=0;
-								 counter_min_update=1;
-							 }	 
-					 
-						}
+							counter_sec=0;
+							counter_min_update=1;
+					 }
+					
 //						watt += 230 * f_disp_amp;
 //							if(watt>60000){unit++; watt=0;}
 				
@@ -117,8 +122,7 @@ void Timer0_ISR (void) interrupt 1           /*interrupt address is 0x000B */
 						 		
 							//	printf("\t\t counter_ms=%d ,counter_sec=%d",counter_ms,counter_sec); 
 							/******************* calcultion code *********************/
-									
-					 
+				}		
 			
 			if(P11==1)
 			{
@@ -251,8 +255,12 @@ void main(void)
 		
 /******************************** timer 0 *************************/
   
-		TIMER0_FSYS_DIV12;
-    ENABLE_TIMER0_MODE1;
+    
+    TH0 = TH0_INIT;            //initial counter values 
+    TL0 = TL0_INIT;    
+   
+		TIMER0_FSYS;
+    ENABLE_TIMER0_MODE2;
 		
 		
     ENABLE_TIMER0_INTERRUPT;                       //enable Timer0 interrupt
@@ -521,20 +529,17 @@ while(1)
 				
 				
 				//printf("%02d%04d%04d\n",key,unit,k_watt);
-			
-			/*
-			printf("\n%ld",temp_watt);			
-	
-			printf("\n%ld",temp_watt);
+										
+				printf("\n%ld",temp_watt);
 	
 			c = temp_watt;	
 									b= c%10000;
 									a= c/10000;
 						
 				printf("\n%d%d",a,b); delay1(10);
-			*/
 				
-				printf("\n\r%02d%04d%006.3f",key,unit,k_watt);	printf("%005.2f",f_disp_amp); 
+//				printf("\n\r%02d%04d%006.3f",key,unit,k_watt);	//printf("%005.2f",f_disp_amp); 
+//				printf("%005.2f",f_disp_amp); 
 				
 				
 									

@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   IAP                                                               12/26/2022 20:27:53 PAGE 1   
+C51 COMPILER V9.56.0.0   IAP                                                               12/27/2022 20:22:19 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE IAP
@@ -62,7 +62,7 @@ line level    source
   44          
   45          /**
   46           * @brief       Erase LDROM  
-C51 COMPILER V9.56.0.0   IAP                                                               12/26/2022 20:27:53 PAGE 2   
+C51 COMPILER V9.56.0.0   IAP                                                               12/27/2022 20:22:19 PAGE 2   
 
   47           * @param       u16IAPStartAddress define LDROM area start address
   48           * @param       u16IAPDataSize define LDROM need be erase bytes size
@@ -126,7 +126,7 @@ line level    source
  105           * @details     Copy IAPDataBuf to LDROM
  106           * @example      LDROM_Program(0x0000,1024);
  107           */
-C51 COMPILER V9.56.0.0   IAP                                                               12/26/2022 20:27:53 PAGE 3   
+C51 COMPILER V9.56.0.0   IAP                                                               12/27/2022 20:22:19 PAGE 3   
 
  108          void Program_LDROM(unsigned int u16IAPStartAddress, unsigned int u16IAPDataSize)
  109          {   
@@ -190,7 +190,7 @@ line level    source
  167           * @param       u16IAPDataSize define LDROM need be erase bytes size
  168           * @return      none
  169           * @details     Page erase APROM area base on data start address 
-C51 COMPILER V9.56.0.0   IAP                                                               12/26/2022 20:27:53 PAGE 4   
+C51 COMPILER V9.56.0.0   IAP                                                               12/27/2022 20:22:19 PAGE 4   
 
  170           * @example      Erase_APROM(0x0000,2048);
  171           */
@@ -254,7 +254,7 @@ line level    source
  228          {   
  229   1          unsigned int u16Count;
  230   1      
-C51 COMPILER V9.56.0.0   IAP                                                               12/26/2022 20:27:53 PAGE 5   
+C51 COMPILER V9.56.0.0   IAP                                                               12/27/2022 20:22:19 PAGE 5   
 
  231   1          set_CHPCON_IAPEN;
  232   1          set_IAPUEN_APUEN;    
@@ -318,7 +318,7 @@ line level    source
  289           */
  290          void Modify_CONFIG(unsigned char u8CF0,unsigned char u8CF1,unsigned char u8CF2,unsigned char u8CF3,unsigne
              -d char u8CF4)
-C51 COMPILER V9.56.0.0   IAP                                                               12/26/2022 20:27:53 PAGE 6   
+C51 COMPILER V9.56.0.0   IAP                                                               12/27/2022 20:22:19 PAGE 6   
 
  291          {   
  292   1          unsigned char u8Count;
@@ -382,7 +382,7 @@ line level    source
  350   1      MDCFEND:
  351   1          set_IAPUEN_CFUEN;                      // APROM modify Enable
  352   1          for(u8Count=0;u8Count<5;u8Count++)    // Loop page erase APROM special define address area.
-C51 COMPILER V9.56.0.0   IAP                                                               12/26/2022 20:27:53 PAGE 7   
+C51 COMPILER V9.56.0.0   IAP                                                               12/27/2022 20:22:19 PAGE 7   
 
  353   1          {        
  354   2              IAPAL = u8Count;
@@ -446,7 +446,7 @@ line level    source
  412   2          } 
  413   1          clr_CHPCON_IAPEN;
  414   1      }
-C51 COMPILER V9.56.0.0   IAP                                                               12/26/2022 20:27:53 PAGE 8   
+C51 COMPILER V9.56.0.0   IAP                                                               12/27/2022 20:22:19 PAGE 8   
 
  415          
  416          /**
