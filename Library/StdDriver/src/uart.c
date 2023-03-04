@@ -13,6 +13,9 @@
 bit PRINTFG = 0, uart0_receive_flag = 0, uart1_receive_flag;
 unsigned char uart0_receive_data, uart1_receive_data;
 
+ unsigned char tx_buffer[12],tx_len,tx_length;
+
+
 
 void Serial_ISR(void) interrupt 4
 {
@@ -55,6 +58,12 @@ void SerialPort1_ISR(void) interrupt 15
         {
             clr_SCON_1_TI_1;                             /* if emission occur */
         }
+		 TI_1 = 0;
+		 tx_len++; 				// clear interrupt request flag
+		 if(tx_len < tx_length) SBUF_1 = tx_buffer[tx_len];
+		
+				
+				
     }
 
     _pop_(SFRS);

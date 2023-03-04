@@ -1,4 +1,4 @@
-".\Output\PWM_simple.obj",
+".\Output\smart_switch.obj",
 ".\Output\sys.obj",
 ".\Output\delay.obj",
 ".\Output\uart.obj",
@@ -8,3 +8,4 @@
 TO ".\Output\PWM" 
 PRINT(".\LST\PWM.m51") RAMSIZE(256) 
 DISABLEWARNING (16) 
+XDATA( 0X0000-0X03FF )

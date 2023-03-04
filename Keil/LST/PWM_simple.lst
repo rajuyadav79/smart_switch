@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 1   
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE PWM_SIMPLE
@@ -62,12 +62,12 @@ line level    source
   50          
   51          
   52          unsigned char xdata ADCdataAIN5H, ADCdataAIN5L;
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 2   
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 2   
 
   53          
   54          float xdata final_amp;
   55          float xdata f_disp_amp;
-  56          float xdata k_watt;
+  56          int xdata k_watt;
   57          
   58          
   59          unsigned int key=0;
@@ -118,7 +118,7 @@ line level    source
  102   2                    
  103   2                    temp_watt = watt;
  104   2                
- 105   2                    k_watt = (230 * f_disp_amp)/1000;  //k_watt = (float)temp_watt/1000;
+ 105   2                    k_watt = (230 * f_disp_amp);  //k_watt = (float)temp_watt/1000;
  106   2                
  107   2                
  108   2                  //   printf("\t\t\n unit=%ld ,watt=%ld",unit,watt); 
@@ -126,7 +126,7 @@ line level    source
  110   2                    // unit watts second
  111   2                
  112   2                   
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 3   
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 3   
 
  113   2                   if(watt>3600000)
  114   2                      {
@@ -190,7 +190,7 @@ line level    source
  172   1          unsigned int x;
  173   1          for(x=0; x<value; x++);
  174   1        }
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 4   
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 4   
 
  175          
  176            
@@ -254,7 +254,7 @@ line level    source
  234   1        
  235   1          P06_PUSHPULL_MODE;
  236   1          P07_INPUT_MODE;
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 5   
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 5   
 
  237   1        
  238   1          P05_PUSHPULL_MODE;
@@ -318,9 +318,9 @@ line level    source
  296   1            //printf("\t\t\n write2 watt=%ld ",count_gain); 
  297   1        
  298   1            c = b*100000 + a;
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 6   
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 6   
 
- 299   1            watt = c;
+ 299   1            watt = 0;
  300   1            printf("\t\t\n write3 watt=%ld ",c); 
  301   1            
  302   1                        
@@ -363,8 +363,8 @@ line level    source
  339   2            
  340   2               for(t=0;t<max_counter;t++)
  341   2                {  
- 342   3                  r_phase_c_max_sample = 100;
- 343   3                  r_phase_c_min_sample = 100;
+ 342   3                  r_phase_c_max_sample = 50;
+ 343   3                  r_phase_c_min_sample = 50;
  344   3      
  345   3                  for(j=0;j<250;j++)
  346   3                   {
@@ -382,7 +382,7 @@ line level    source
  358   4      
  359   4                        s1 = ADCdataAIN5H * 256 + ADCdataAIN5L;
  360   4             
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 7   
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 7   
 
  361   4                    if(s1>r_phase_c_max_sample)r_phase_c_max_sample = s1;
  362   4                    
@@ -446,7 +446,7 @@ line level    source
  420   2            
  421   2      
  422   2      //        printf("\n\r\t ADC_stable=%u", ADC_stable); 
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 8   
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 8   
 
  423   2      //        final_amp = (ADC_stable*0.0108);
  424   2      //        printf("\n\r\t ADC_cureent_Amp= %0.2f", final_amp); show_data_time_counter=0;
@@ -465,7 +465,7 @@ line level    source
  437   2      
  438   2              //if(final_amp == 0.0 ) f_disp_amp = 0;
  439   2      
- 440   2               if(final_amp >= 0.1 && final_amp  <=  0.5) f_disp_amp = (final_amp* (1.0000));
+ 440   2               if(final_amp >= 0.0 && final_amp  <=  0.5) f_disp_amp = (final_amp* (1.0000));
  441   2              else if(final_amp >= 0.6 && final_amp  <=  1.0) f_disp_amp = (final_amp* (1.0309));
  442   2      
  443   2                
@@ -510,7 +510,7 @@ line level    source
  482   2              else if(final_amp >= 12.6 && final_amp <= 13.0) f_disp_amp = (final_amp* (0.9893));
  483   2              
  484   2              else if(final_amp >= 13.1 && final_amp <= 13.5) f_disp_amp = (final_amp* (0.9783));
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 9   
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 9   
 
  485   2              else if(final_amp >= 13.6 && final_amp <= 14.0) f_disp_amp = (final_amp* (0.9777));
  486   2              
@@ -542,168 +542,181 @@ line level    source
  512   2      
  513   2              else f_disp_amp = (final_amp* (1));
  514   2        
- 515   2            //  printf("\t\t%005.2f", f_disp_amp);        
+ 515   2               if(final_amp <= 0.2) f_disp_amp = 0;
  516   2      
- 517   2            //  printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %f",f_disp_amp,key,unit,watt,k_w
+ 517   2        
+ 518   2            //  printf("\t\t%005.2f", f_disp_amp);        
+ 519   2      
+ 520   2            //  printf("\nDisplay Amp=%0.1f switch=%d,Unit = %d,watt = %ld,k_watt = %f",f_disp_amp,key,unit,watt,k_w
              -att); 
- 518   2              
- 519   2            //  printf("\n%d,%d,%ld",key,unit,k_watt); // this command final for kunjan bhai
- 520   2              
  521   2              
- 522   2              
- 523   2              //printf("%02d%04d%04d\n",key,unit,k_watt);
- 524   2            
- 525   2            /*
- 526   2            printf("\n%ld",temp_watt);      
- 527   2        
- 528   2            printf("\n%ld",temp_watt);
- 529   2        
- 530   2            c = temp_watt;  
- 531   2                        b= c%10000;
- 532   2                        a= c/10000;
- 533   2                  
- 534   2              printf("\n%d%d",a,b); delay1(10);
- 535   2            */
- 536   2              
- 537   2              printf("\n\r%02d%04d%006.3f",key,unit,k_watt);  printf("%005.2f",f_disp_amp); 
- 538   2              
+ 522   2            //  printf("\n%d,%d,%ld",key,unit,k_watt); // this command final for kunjan bhai
+ 523   2              
+ 524   2              
+ 525   2              
+ 526   2              //printf("%02d%04d%04d\n",key,unit,k_watt);
+ 527   2            
+ 528   2            /*
+ 529   2            printf("\n%ld",temp_watt);      
+ 530   2        
+ 531   2            printf("\n%ld",temp_watt);
+ 532   2        
+ 533   2            c = temp_watt;  
+ 534   2                        b= c%10000;
+ 535   2                        a= c/10000;
+ 536   2                  
+ 537   2              printf("\n%d%d",a,b); delay1(10);
+ 538   2            */
  539   2              
- 540   2                        
+ 540   2              
  541   2              
- 542   2            //  
+ 542   2              //printf("\n\r%02d%04d%006.3f",key,unit,k_watt);  printf("%005.2f",f_disp_amp); 
  543   2              
- 544   2                if(P05==0)
- 545   2                  { 
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 10  
+ 544   2              printf("\n\r%02d,%04d,%04d",key,unit,k_watt); 
+ 545   2              printf(",%005.2f",f_disp_amp); 
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 10  
 
- 546   3                        clr_TCON_TR0;                       //Stop Timer0
- 547   3                        count_gain = ADC_stable;
- 548   3                        StructData.a=ADC_stable;
- 549   3                        Write_DATAFLASH_ARRAY(0x38FE,(unsigned char *)&StructData,sizeof(StructData));//write structure
- 550   3                        /***************data write in iap ******************************/       
- 551   3                        //printf("\n\r\t count_gain1= %ld", count_gain); 
- 552   3                        watt=0;
- 553   3                        printf("\n DONE "); delay1(1000);
- 554   3                      set_TCON_TR0;                       //start Timer0
- 555   3                    
- 556   3                        while(P05==0);
- 557   3                    
- 558   3                  } 
- 559   2      
- 560   2            
- 561   2        
- 562   2              if(unit_update==1)
- 563   2                { unit_update=0;
- 564   3                  //  clr_TCON_TR0;                       //Stop Timer0
- 565   3                  StructData.b = unit;
- 566   3                  Write_DATAFLASH_ARRAY(0x39FE,(unsigned char *)&StructData,sizeof(StructData));//write structure
- 567   3                //   set_TCON_TR0;                       //start Timer0
- 568   3                }
- 569   2        
- 570   2                
- 571   2                
- 572   2                if(counter_min_update==1)
- 573   2                {
- 574   3                  counter_min_update=0;
- 575   3                  //printf("\n\r watt=%ld",temp_watt); 
- 576   3                  //  clr_TCON_TR0;                       //Stop Timer0
- 577   3                        a= temp_watt%100000;
- 578   3                        b= temp_watt/100000;
- 579   3                        
- 580   3                        StructData.a=a;
- 581   3                        Write_DATAFLASH_ARRAY(0x3800,(unsigned char *)&StructData,sizeof(StructData));//write structure
- 582   3                      
- 583   3                        StructData.a=b;
- 584   3                        
- 585   3                        Write_DATAFLASH_ARRAY(0x3802,(unsigned char *)&StructData,sizeof(StructData));//write structure
- 586   3                        delay1(100);
- 587   3                        
- 588   3      //                  a = ((read_APROM_BYTE(0x3800)<<8)+read_APROM_BYTE(0x3801));
- 589   3      //                  b = ((read_APROM_BYTE(0x3802)<<8)+read_APROM_BYTE(0x3803));
- 590   3      
- 591   3      //                  //printf("\t\t\n write2 watt=%ld ",ADC_stable); 
- 592   3      //                  //printf("\t\t\n write2 watt=%ld ",count_gain); 
- 593   3      //              
- 594   3      //                  c = b*100000 + a;
- 595   3      //                  printf("\t\t\n write3 watt=%ld ",c); 
- 596   3                //          set_TCON_TR0;                       //start Timer0
- 597   3                  
- 598   3                }
- 599   2                
- 600   2                
- 601   2                        
- 602   2        
- 603   2      
- 604   2                
- 605   2                
- 606   2            
- 607   2      //      printf("\n\r\t ADc_count=%u", ADCcount);
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 11  
+ 546   2              printf(",%07ld",temp_watt);       
+ 547   2              
+ 548   2              //printf(" %ld",k_watt);        
+ 549   2              
+ 550   2              
+ 551   2            //  
+ 552   2              
+ 553   2                if(P05==0)
+ 554   2                  { 
+ 555   3                        clr_TCON_TR0;                       //Stop Timer0
+ 556   3                        count_gain = ADC_stable;
+ 557   3                        StructData.a=ADC_stable;
+ 558   3                        Write_DATAFLASH_ARRAY(0x38FE,(unsigned char *)&StructData,sizeof(StructData));//write structure
+ 559   3                        /***************data write in iap ******************************/       
+ 560   3                        //printf("\n\r\t count_gain1= %ld", count_gain); 
+ 561   3                        watt=0;
+ 562   3                        temp_watt=0;
+ 563   3                        printf("\n DONE "); delay1(1000);
+ 564   3                        set_TCON_TR0;                       //start Timer0
+ 565   3                    
+ 566   3                        while(P05==0);
+ 567   3                        goto SET_WATT_0;
+ 568   3                      
+ 569   3                  } 
+ 570   2      
+ 571   2            
+ 572   2        
+ 573   2              if(unit_update==1)
+ 574   2                { unit_update=0;
+ 575   3                  //  clr_TCON_TR0;                       //Stop Timer0
+ 576   3                  StructData.b = unit;
+ 577   3                  Write_DATAFLASH_ARRAY(0x39FE,(unsigned char *)&StructData,sizeof(StructData));//write structure
+ 578   3                //   set_TCON_TR0;                       //start Timer0
+ 579   3                }
+ 580   2        
+ 581   2                
+ 582   2                
+ 583   2                if(counter_min_update==1)
+ 584   2                {
+ 585   3                  SET_WATT_0:
+ 586   3                  
+ 587   3                  counter_min_update=0;
+ 588   3                  //printf("\n\r watt=%ld",temp_watt); 
+ 589   3                  //  clr_TCON_TR0;                       //Stop Timer0
+ 590   3                        a= temp_watt%100000;
+ 591   3                        b= temp_watt/100000;
+ 592   3                        
+ 593   3                        StructData.a=a;
+ 594   3                        Write_DATAFLASH_ARRAY(0x3800,(unsigned char *)&StructData,sizeof(StructData));//write structure
+ 595   3                      
+ 596   3                        StructData.a=b;
+ 597   3                        
+ 598   3                        Write_DATAFLASH_ARRAY(0x3802,(unsigned char *)&StructData,sizeof(StructData));//write structure
+ 599   3                        delay1(100);
+ 600   3                        
+ 601   3      //                  a = ((read_APROM_BYTE(0x3800)<<8)+read_APROM_BYTE(0x3801));
+ 602   3      //                  b = ((read_APROM_BYTE(0x3802)<<8)+read_APROM_BYTE(0x3803));
+ 603   3      
+ 604   3      //                  //printf("\t\t\n write2 watt=%ld ",ADC_stable); 
+ 605   3      //                  //printf("\t\t\n write2 watt=%ld ",count_gain); 
+ 606   3      //              
+ 607   3      //                  c = b*100000 + a;
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 11  
 
- 608   2      //      unsigned long accurate_adc_count,adc_count;
- 609   2      //      printf("\r\t ADc_data =%u", ADCdata);
- 610   2      //      ADCdata = ADCdata/5;
- 611   2      //      
- 612   2      //      printf("\n\n\t\t ADc_data =%u", ADCdata);
- 613   2      //      printf ("ADCH 0x%bx%bx\n",ADCdataAIN5H,ADCdataAIN5L);
- 614   2      //      
- 615   2      //      printf("\n ADC channel 5 =0x%bx", ADCdataAIN5H);
- 616   2      //      printf("\n ADC channel 5 =0x%bx", ADCdataAIN5L);
- 617   2      //      
- 618   2      //      printf("\n ADC channel H 5 =%u ", ADCdataAIN5H);
- 619   2      //      printf("\n ADC channel L 5 =%u ", ADCdataAIN5L);
- 620   2      //  Timer1_Delay(24000000,5,5);
- 621   2          } 
- 622   1          
- 623   1      
- 624   1      }
- 625          
- 626          
- 627          
- 628          /* 
- 629          // old data
- 630          //        if(final_amp >= 0.0 && final_amp  <=  1.0) f_disp_amp = (final_amp* (1.0));
- 631          //        else if(final_amp >= 1.1 && final_amp  <=  2.0) f_disp_amp = (final_amp* (1.54));
- 632          //        else if(final_amp >= 2.1 && final_amp  <=  3.0) f_disp_amp = (final_amp* (1.50));
- 633          //        else if(final_amp >= 3.1 && final_amp  <=  4.0) f_disp_amp = (final_amp* (1.43));
- 634          //        else if(final_amp >= 4.1 && final_amp  <=  5.0) f_disp_amp = (final_amp* (1.28));
- 635          //        else if(final_amp >= 5.1 && final_amp  <=  6.0) f_disp_amp = (final_amp* (1.20));
- 636          //        else if(final_amp >= 6.1 && final_amp  <=  7.0) f_disp_amp = (final_amp* (1.13));
- 637          //        
- 638          //        else if(final_amp >= 7.1 && final_amp  <=  7.5) f_disp_amp = (final_amp* (1.094));
- 639          //        else if(final_amp >= 7.6 && final_amp  <=  8.0) f_disp_amp = (final_amp* (1.09));
- 640          //        
- 641          //        
- 642          //        else if(final_amp >= 8.1 && final_amp  <=  9.5) f_disp_amp = (final_amp* (1.03));
- 643          //        
- 644          //        else if(final_amp >= 9.5 && final_amp  <= 9.9) f_disp_amp = (final_amp* (1.02));
- 645          //        
- 646          //        else if(final_amp >= 9.9 && final_amp  <= 10.0) f_disp_amp = (final_amp* (1.00));
- 647          //        
- 648          //        else if(final_amp >= 10.1 && final_amp <= 10.5) f_disp_amp = (final_amp* (0.99));
- 649          //        else if(final_amp >= 10.5 && final_amp <= 11.0) f_disp_amp = (final_amp* (0.97));
- 650          //        else if(final_amp >= 11.1 && final_amp <= 11.5) f_disp_amp = (final_amp* (0.96));
- 651          //        else if(final_amp >= 11.6 && final_amp <= 12.0) f_disp_amp = (final_amp* (0.96));
- 652          //        else if(final_amp >= 12.1 && final_amp <= 12.5) f_disp_amp = (final_amp* (0.96));
- 653          
- 654          //        else if(final_amp >= 12.6 && final_amp <= 13.0) f_disp_amp = (final_amp* (0.95));
- 655          //        else if(final_amp >= 13.1 && final_amp <= 13.5) f_disp_amp = (final_amp* (0.94));
- 656          //        else if(final_amp >= 13.6 && final_amp <= 14.0) f_disp_amp = (final_amp* (0.94));
- 657          //        else if(final_amp >= 14.1 && final_amp <= 14.5) f_disp_amp = (final_amp* (0.94));
- 658          //        else if(final_amp >= 14.6 && final_amp <= 15.0) f_disp_amp = (final_amp* (0.93));
- 659          //        else if(final_amp >= 15.1 && final_amp <= 15.5) f_disp_amp = (final_amp* (0.93));
- 660          
- 661          */
+ 608   3      //                  printf("\t\t\n write3 watt=%ld ",c); 
+ 609   3                //          set_TCON_TR0;                       //start Timer0
+ 610   3                  
+ 611   3                }
+ 612   2                
+ 613   2                
+ 614   2                        
+ 615   2        
+ 616   2      
+ 617   2                
+ 618   2                
+ 619   2            
+ 620   2      //      printf("\n\r\t ADc_count=%u", ADCcount);
+ 621   2      //      unsigned long accurate_adc_count,adc_count;
+ 622   2      //      printf("\r\t ADc_data =%u", ADCdata);
+ 623   2      //      ADCdata = ADCdata/5;
+ 624   2      //      
+ 625   2      //      printf("\n\n\t\t ADc_data =%u", ADCdata);
+ 626   2      //      printf ("ADCH 0x%bx%bx\n",ADCdataAIN5H,ADCdataAIN5L);
+ 627   2      //      
+ 628   2      //      printf("\n ADC channel 5 =0x%bx", ADCdataAIN5H);
+ 629   2      //      printf("\n ADC channel 5 =0x%bx", ADCdataAIN5L);
+ 630   2      //      
+ 631   2      //      printf("\n ADC channel H 5 =%u ", ADCdataAIN5H);
+ 632   2      //      printf("\n ADC channel L 5 =%u ", ADCdataAIN5L);
+ 633   2      //  Timer1_Delay(24000000,5,5);
+ 634   2          } 
+ 635   1          
+ 636   1      
+ 637   1      }
+ 638          
+ 639          
+ 640          
+ 641          /* 
+ 642          // old data
+ 643          //        if(final_amp >= 0.0 && final_amp  <=  1.0) f_disp_amp = (final_amp* (1.0));
+ 644          //        else if(final_amp >= 1.1 && final_amp  <=  2.0) f_disp_amp = (final_amp* (1.54));
+ 645          //        else if(final_amp >= 2.1 && final_amp  <=  3.0) f_disp_amp = (final_amp* (1.50));
+ 646          //        else if(final_amp >= 3.1 && final_amp  <=  4.0) f_disp_amp = (final_amp* (1.43));
+ 647          //        else if(final_amp >= 4.1 && final_amp  <=  5.0) f_disp_amp = (final_amp* (1.28));
+ 648          //        else if(final_amp >= 5.1 && final_amp  <=  6.0) f_disp_amp = (final_amp* (1.20));
+ 649          //        else if(final_amp >= 6.1 && final_amp  <=  7.0) f_disp_amp = (final_amp* (1.13));
+ 650          //        
+ 651          //        else if(final_amp >= 7.1 && final_amp  <=  7.5) f_disp_amp = (final_amp* (1.094));
+ 652          //        else if(final_amp >= 7.6 && final_amp  <=  8.0) f_disp_amp = (final_amp* (1.09));
+ 653          //        
+ 654          //        
+ 655          //        else if(final_amp >= 8.1 && final_amp  <=  9.5) f_disp_amp = (final_amp* (1.03));
+ 656          //        
+ 657          //        else if(final_amp >= 9.5 && final_amp  <= 9.9) f_disp_amp = (final_amp* (1.02));
+ 658          //        
+ 659          //        else if(final_amp >= 9.9 && final_amp  <= 10.0) f_disp_amp = (final_amp* (1.00));
+ 660          //        
+ 661          //        else if(final_amp >= 10.1 && final_amp <= 10.5) f_disp_amp = (final_amp* (0.99));
+ 662          //        else if(final_amp >= 10.5 && final_amp <= 11.0) f_disp_amp = (final_amp* (0.97));
+ 663          //        else if(final_amp >= 11.1 && final_amp <= 11.5) f_disp_amp = (final_amp* (0.96));
+ 664          //        else if(final_amp >= 11.6 && final_amp <= 12.0) f_disp_amp = (final_amp* (0.96));
+ 665          //        else if(final_amp >= 12.1 && final_amp <= 12.5) f_disp_amp = (final_amp* (0.96));
+ 666          
+ 667          //        else if(final_amp >= 12.6 && final_amp <= 13.0) f_disp_amp = (final_amp* (0.95));
+ 668          //        else if(final_amp >= 13.1 && final_amp <= 13.5) f_disp_amp = (final_amp* (0.94));
+ 669          //        else if(final_amp >= 13.6 && final_amp <= 14.0) f_disp_amp = (final_amp* (0.94));
+C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/28/2022 20:12:49 PAGE 12  
+
+ 670          //        else if(final_amp >= 14.1 && final_amp <= 14.5) f_disp_amp = (final_amp* (0.94));
+ 671          //        else if(final_amp >= 14.6 && final_amp <= 15.0) f_disp_amp = (final_amp* (0.93));
+ 672          //        else if(final_amp >= 15.1 && final_amp <= 15.5) f_disp_amp = (final_amp* (0.93));
+ 673          
+ 674          */
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   6255    ----
-   CONSTANT SIZE    =     55    ----
-   XDATA SIZE       =     72      23
+   CODE SIZE        =   6309    ----
+   CONSTANT SIZE    =     62    ----
+   XDATA SIZE       =     70      23
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
-C51 COMPILER V9.56.0.0   PWM_SIMPLE                                                        12/27/2022 20:29:31 PAGE 12  
-
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      2    ----
 END OF MODULE INFORMATION.

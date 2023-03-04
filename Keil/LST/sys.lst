@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   SYS                                                               12/27/2022 20:22:19 PAGE 1   
+C51 COMPILER V9.56.0.0   SYS                                                               03/04/2023 14:59:24 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE SYS
@@ -62,7 +62,7 @@ line level    source
   44   1          IAPAH = 0x00;
   45   1          IAPCN = READ_UID;
   46   1          set_IAPTRG_IAPGO;
-C51 COMPILER V9.56.0.0   SYS                                                               12/27/2022 20:22:19 PAGE 2   
+C51 COMPILER V9.56.0.0   SYS                                                               03/04/2023 14:59:24 PAGE 2   
 
   47   1          hircmap0 = IAPFD;
   48   1          IAPAL++;
@@ -126,7 +126,7 @@ line level    source
  106   2          break;
  107   2        }
  108   1      }
-C51 COMPILER V9.56.0.0   SYS                                                               12/27/2022 20:22:19 PAGE 3   
+C51 COMPILER V9.56.0.0   SYS                                                               03/04/2023 14:59:24 PAGE 3   
 
  109          
  110          void ClockEnable(unsigned char u8FsysMode)
@@ -190,7 +190,7 @@ line level    source
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    515    ----
-C51 COMPILER V9.56.0.0   SYS                                                               12/27/2022 20:22:19 PAGE 4   
+C51 COMPILER V9.56.0.0   SYS                                                               03/04/2023 14:59:24 PAGE 4   
 
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----

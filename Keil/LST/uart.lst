@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   UART                                                              12/27/2022 20:22:19 PAGE 1   
+C51 COMPILER V9.56.0.0   UART                                                              03/04/2023 14:59:24 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE UART
@@ -34,100 +34,109 @@ line level    source
   13          bit PRINTFG = 0, uart0_receive_flag = 0, uart1_receive_flag;
   14          unsigned char uart0_receive_data, uart1_receive_data;
   15          
-  16          
-  17          void Serial_ISR(void) interrupt 4
-  18          {
-  19   1          _push_(SFRS);
-  20   1        
-  21   1          if (RI)
-  22   1          {
-  23   2              uart0_receive_flag = 1;
-  24   2              uart0_receive_data = SBUF;
-  25   2              clr_SCON_RI;                                         // Clear RI (Receive Interrupt).
-  26   2          }
-  27   1      
-  28   1          if (TI)
-  29   1          {
-  30   2              if (!PRINTFG)
-  31   2              {
-  32   3                  TI = 0;
-  33   3              }
-  34   2          }
-  35   1      
-  36   1          _pop_(SFRS);
-  37   1      } 
-  38          
-  39          
-  40          
-  41          void SerialPort1_ISR(void) interrupt 15
-  42          {
-  43   1          _push_(SFRS);
-C51 COMPILER V9.56.0.0   UART                                                              12/27/2022 20:22:19 PAGE 2   
+  16           unsigned char tx_buffer[12],tx_len,tx_length;
+  17          
+  18          
+  19          
+  20          void Serial_ISR(void) interrupt 4
+  21          {
+  22   1          _push_(SFRS);
+  23   1        
+  24   1          if (RI)
+  25   1          {
+  26   2              uart0_receive_flag = 1;
+  27   2              uart0_receive_data = SBUF;
+  28   2              clr_SCON_RI;                                         // Clear RI (Receive Interrupt).
+  29   2          }
+  30   1      
+  31   1          if (TI)
+  32   1          {
+  33   2              if (!PRINTFG)
+  34   2              {
+  35   3                  TI = 0;
+  36   3              }
+  37   2          }
+  38   1      
+  39   1          _pop_(SFRS);
+  40   1      } 
+  41          
+  42          
+  43          
+C51 COMPILER V9.56.0.0   UART                                                              03/04/2023 14:59:24 PAGE 2   
 
-  44   1        
-  45   1          if (RI_1)
-  46   1          {
-  47   2              uart1_receive_data = SBUF_1;
-  48   2              uart1_receive_flag = 1;
-  49   2              clr_SCON_1_RI_1;                             /* clear reception flag for next reception */
-  50   2          }
-  51   1      
-  52   1          if (TI_1 == 1)
-  53   1          {
-  54   2              if (!PRINTFG)
-  55   2              {
-  56   3                  clr_SCON_1_TI_1;                             /* if emission occur */
-  57   3              }
-  58   2          }
-  59   1      
-  60   1          _pop_(SFRS);
-  61   1      }
-  62          
-  63          
-  64          
-  65          /*MS51 new version buadrate */
-  66          void UART_Open(unsigned long u32SysClock, unsigned char u8UARTPort,unsigned long u32Baudrate)
-  67          {
-  68   1        switch(u8UARTPort)
-  69   1        {
-  70   2          case UART0_Timer1:
-  71   2                SCON = 0x50;       //UART0 Mode1,REN=1,TI=1
-  72   2                TMOD |= 0x20;      //Timer1 Mode1
-  73   2                set_PCON_SMOD;          //UART0 Double Rate Enable
-  74   2                set_CKCON_T1M;
-  75   2                clr_T3CON_BRCK;          //Serial port 0 baud rate clock source = Timer1
-  76   2                TH1 = 256 - (u32SysClock/16/u32Baudrate);
-  77   2                set_TCON_TR1;
-  78   2            break;
-  79   2            
-  80   2            case UART0_Timer3:
-  81   2                SCON = 0x50;     //UART0 Mode1,REN=1,TI=1
-  82   2                set_PCON_SMOD;        //UART0 Double Rate Enable
-  83   2                T3CON &= 0xF8;   //T3PS2=0,T3PS1=0,T3PS0=0(Prescale=1)
-  84   2                set_T3CON_BRCK;        //UART0 baud rate clock source = Timer3
-  85   2                RH3    = HIBYTE(65536 - (u32SysClock/16/u32Baudrate));  
-  86   2                RL3    = LOBYTE(65536 - (u32SysClock/16/u32Baudrate));  
-  87   2                set_T3CON_TR3;         //Trigger Timer3
-  88   2            break;
-  89   2            
-  90   2            case UART1_Timer3:
-  91   2                SCON_1 = 0x50;     //UART1 Mode1,REN_1=1,TI_1=1
-  92   2                T3CON = 0x80;     //T3PS2=0,T3PS1=0,T3PS0=0(Prescale=1), UART1 in MODE 1
-  93   2                RH3    = HIBYTE(65536 - (u32SysClock/16/u32Baudrate));  
-  94   2                RL3    = LOBYTE(65536 - (u32SysClock/16/u32Baudrate));     
-  95   2                set_T3CON_TR3;             //Trigger Timer3                                                     
+  44          void SerialPort1_ISR(void) interrupt 15
+  45          {
+  46   1          _push_(SFRS);
+  47   1        
+  48   1          if (RI_1)
+  49   1          {
+  50   2              uart1_receive_data = SBUF_1;
+  51   2              uart1_receive_flag = 1;
+  52   2              clr_SCON_1_RI_1;                             /* clear reception flag for next reception */
+  53   2          }
+  54   1      
+  55   1          if (TI_1 == 1)
+  56   1          {
+  57   2              if (!PRINTFG)
+  58   2              {
+  59   3                  clr_SCON_1_TI_1;                             /* if emission occur */
+  60   3              }
+  61   2           TI_1 = 0;
+  62   2           tx_len++;        // clear interrupt request flag
+  63   2           if(tx_len < tx_length) SBUF_1 = tx_buffer[tx_len];
+  64   2          
+  65   2              
+  66   2              
+  67   2          }
+  68   1      
+  69   1          _pop_(SFRS);
+  70   1      }
+  71          
+  72          
+  73          
+  74          /*MS51 new version buadrate */
+  75          void UART_Open(unsigned long u32SysClock, unsigned char u8UARTPort,unsigned long u32Baudrate)
+  76          {
+  77   1        switch(u8UARTPort)
+  78   1        {
+  79   2          case UART0_Timer1:
+  80   2                SCON = 0x50;       //UART0 Mode1,REN=1,TI=1
+  81   2                TMOD |= 0x20;      //Timer1 Mode1
+  82   2                set_PCON_SMOD;          //UART0 Double Rate Enable
+  83   2                set_CKCON_T1M;
+  84   2                clr_T3CON_BRCK;          //Serial port 0 baud rate clock source = Timer1
+  85   2                TH1 = 256 - (u32SysClock/16/u32Baudrate);
+  86   2                set_TCON_TR1;
+  87   2            break;
+  88   2            
+  89   2            case UART0_Timer3:
+  90   2                SCON = 0x50;     //UART0 Mode1,REN=1,TI=1
+  91   2                set_PCON_SMOD;        //UART0 Double Rate Enable
+  92   2                T3CON &= 0xF8;   //T3PS2=0,T3PS1=0,T3PS0=0(Prescale=1)
+  93   2                set_T3CON_BRCK;        //UART0 baud rate clock source = Timer3
+  94   2                RH3    = HIBYTE(65536 - (u32SysClock/16/u32Baudrate));  
+  95   2                RL3    = LOBYTE(65536 - (u32SysClock/16/u32Baudrate));  
+  96   2                set_T3CON_TR3;         //Trigger Timer3
+  97   2            break;
+  98   2            
+  99   2            case UART1_Timer3:
+ 100   2                SCON_1 = 0x50;     //UART1 Mode1,REN_1=1,TI_1=1
+ 101   2                T3CON = 0x80;     //T3PS2=0,T3PS1=0,T3PS0=0(Prescale=1), UART1 in MODE 1
+ 102   2                RH3    = HIBYTE(65536 - (u32SysClock/16/u32Baudrate));  
+ 103   2                RL3    = LOBYTE(65536 - (u32SysClock/16/u32Baudrate));     
+ 104   2                set_T3CON_TR3;             //Trigger Timer3                                                     
              -        
-  96   2            break; 
-  97   2        }
-  98   1      }
-  99          
- 100          #if 0 
+C51 COMPILER V9.56.0.0   UART                                                              03/04/2023 14:59:24 PAGE 3   
+
+ 105   2            break; 
+ 106   2        }
+ 107   1      }
+ 108          
+ 109          #if 0 
               unsigned char Receive_Data(unsigned char UARTPort)
               {
                   UINT8 c;
                   switch (UARTPort)
-C51 COMPILER V9.56.0.0   UART                                                              12/27/2022 20:22:19 PAGE 3   
-
                   {
                     case UART0:
                       while (!RI);
@@ -143,26 +152,26 @@ line level    source
                   return (c);
               }
               #endif
- 120          
- 121          void UART_Send_Data(UINT8 UARTPort, UINT8 c)
- 122          {
- 123   1          switch (UARTPort)
- 124   1          {
- 125   2            case UART0:
- 126   2              SBUF = c;
- 127   2            break;
- 128   2            case UART1:
- 129   2              SBUF_1 = c;
- 130   2            break;
- 131   2          }
- 132   1      }
- 133          
+ 129          
+ 130          void UART_Send_Data(UINT8 UARTPort, UINT8 c)
+ 131          {
+ 132   1          switch (UARTPort)
+ 133   1          {
+ 134   2            case UART0:
+ 135   2              SBUF = c;
+ 136   2            break;
+ 137   2            case UART1:
+ 138   2              SBUF_1 = c;
+ 139   2            break;
+ 140   2          }
+ 141   1      }
+ 142          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    444    ----
+   CODE SIZE        =    494    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      2       9
+   XDATA SIZE       =     16       9
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   EEPROM                                                            12/27/2022 20:22:19 PAGE 1   
+C51 COMPILER V9.56.0.0   EEPROM                                                            03/04/2023 14:59:25 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE EEPROM
@@ -62,147 +62,149 @@ line level    source
   42   1        unsigned int RAMtmp;
   43   1        
   44   1      //Check page start address
-C51 COMPILER V9.56.0.0   EEPROM                                                            12/27/2022 20:22:19 PAGE 2   
+C51 COMPILER V9.56.0.0   EEPROM                                                            03/04/2023 14:59:25 PAGE 2   
 
   45   1        u16_addrl_r=(u16EPAddr/128)*128;
   46   1      //Save APROM data to XRAM0
-  47   1        for(looptmp=0;looptmp<0x80;looptmp++)
-  48   1        {
-  49   2          RAMtmp = Read_APROM_BYTE((unsigned int code *)(u16_addrl_r+looptmp));
-  50   2          page_buffer[looptmp]=RAMtmp;
-  51   2        }
-  52   1      // Modify customer data in XRAM
-  53   1        page_buffer[u16EPAddr&0x7f] = u8EPData;
-  54   1        
-  55   1      //Erase APROM DATAFLASH page
-  56   1          IAPAL = u16_addrl_r&0xff;
-  57   1          IAPAH = (u16_addrl_r>>8)&0xff;
-  58   1          IAPFD = 0xFF;
-  59   1          set_CHPCON_IAPEN; 
-  60   1          set_IAPUEN_APUEN;
-  61   1          IAPCN = 0x22;     
-  62   1           set_IAPTRG_IAPGO; 
-  63   1          
-  64   1      //Save changed RAM data to APROM DATAFLASH
-  65   1          set_CHPCON_IAPEN; 
-  66   1          set_IAPUEN_APUEN;
-  67   1          IAPCN = 0x21;
-  68   1          for(looptmp=0;looptmp<0x80;looptmp++)
-  69   1          {
-  70   2            IAPAL = (u16_addrl_r&0xff)+looptmp;
-  71   2            IAPAH = (u16_addrl_r>>8)&0xff;
-  72   2            IAPFD = page_buffer[looptmp];
-  73   2            set_IAPTRG_IAPGO;      
-  74   2          }
-  75   1          clr_IAPUEN_APUEN;
-  76   1          clr_CHPCON_IAPEN;
-  77   1      }  
-  78          
+  47   1        
+  48   1        for(looptmp=0;looptmp<0x80;looptmp++)//0x80 = 128
+  49   1        {
+  50   2          RAMtmp = Read_APROM_BYTE((unsigned int code *)(u16_addrl_r+looptmp));
+  51   2          page_buffer[looptmp]=RAMtmp;
+  52   2        }
+  53   1      // Modify customer data in XRAM
+  54   1        page_buffer[u16EPAddr&0x7f] = u8EPData;
+  55   1        
+  56   1      //Erase APROM DATAFLASH page
+  57   1          IAPAL = u16_addrl_r&0xff;
+  58   1          IAPAH = (u16_addrl_r>>8)&0xff;
+  59   1          IAPFD = 0xFF;
+  60   1          set_CHPCON_IAPEN; 
+  61   1          set_IAPUEN_APUEN;
+  62   1          IAPCN = 0x22;     
+  63   1           set_IAPTRG_IAPGO; 
+  64   1          
+  65   1      //Save changed RAM data to APROM DATAFLASH
+  66   1          set_CHPCON_IAPEN; 
+  67   1          set_IAPUEN_APUEN;
+  68   1          IAPCN = 0x21;
+  69   1          for(looptmp=0;looptmp<0x80;looptmp++)
+  70   1          {
+  71   2            IAPAL = (u16_addrl_r&0xff)+looptmp;
+  72   2            IAPAH = (u16_addrl_r>>8)&0xff;
+  73   2            IAPFD = page_buffer[looptmp];
+  74   2            set_IAPTRG_IAPGO;      
+  75   2          }
+  76   1          clr_IAPUEN_APUEN;
+  77   1          clr_CHPCON_IAPEN;
+  78   1      }  
   79          
-  80          //-------------------------------------------------------------------------
-  81          void Write_DATAFLASH_ARRAY(unsigned int u16_addr,unsigned char *pDat,unsigned int num)
-  82          {
-  83   1        unsigned char CPageAddr,EPageAddr,cnt;
-  84   1        CPageAddr=u16_addr>>7;
-  85   1        EPageAddr=(u16_addr+num)>>7;
-  86   1        while(CPageAddr!=EPageAddr)
-  87   1        {
-  88   2          cnt=WriteDataToOnePage(u16_addr,pDat,128);
-  89   2          u16_addr+=cnt;
-  90   2          pDat+=cnt;
-  91   2          num-=cnt;
-  92   2          CPageAddr=u16_addr>>7;
-  93   2        }
-  94   1        if(num)
-  95   1        {
-  96   2          WriteDataToOnePage(u16_addr,pDat,num);
-  97   2        }
-  98   1      }
-  99          //-------------------------------------------------------------------------
- 100          void Read_DATAFLASH_ARRAY(unsigned int u16_addr,unsigned char *pDat,unsigned int num)
- 101          {
- 102   1        unsigned int i;
- 103   1        for(i=0;i<num;i++)
- 104   1          pDat[i] = *(unsigned char code *)(u16_addr+i);
- 105   1      }
- 106          
-C51 COMPILER V9.56.0.0   EEPROM                                                            12/27/2022 20:22:19 PAGE 3   
+  80          
+  81          //-------------------------------------------------------------------------
+  82          void Write_DATAFLASH_ARRAY(unsigned int u16_addr,unsigned char *pDat,unsigned int num)
+  83          {
+  84   1        unsigned char CPageAddr,EPageAddr,cnt;
+  85   1        CPageAddr=u16_addr>>7;
+  86   1        EPageAddr=(u16_addr+num)>>7;
+  87   1        while(CPageAddr!=EPageAddr)
+  88   1        {
+  89   2          cnt=WriteDataToOnePage(u16_addr,pDat,128);
+  90   2          u16_addr+=cnt;
+  91   2          pDat+=cnt;
+  92   2          num-=cnt;
+  93   2          CPageAddr=u16_addr>>7;
+  94   2        }
+  95   1        if(num)
+  96   1        {
+  97   2          WriteDataToOnePage(u16_addr,pDat,num);
+  98   2        }
+  99   1      }
+ 100          //-------------------------------------------------------------------------
+ 101          void Read_DATAFLASH_ARRAY(unsigned int u16_addr,unsigned char *pDat,unsigned int num)
+ 102          {
+ 103   1        unsigned int i;
+ 104   1        for(i=0;i<num;i++)
+ 105   1          pDat[i] = *(unsigned char code *)(u16_addr+i);
+ 106   1      }
+C51 COMPILER V9.56.0.0   EEPROM                                                            03/04/2023 14:59:25 PAGE 3   
 
- 107          //--------------------------------------------------------------------------------------------------------
+ 107          
+ 108          //--------------------------------------------------------------------------------------------------------
              ----
- 108          unsigned char WriteDataToOnePage(unsigned int u16_addr,const unsigned char *pDat,unsigned char num)
- 109          {
- 110   1        unsigned char i,offset;
- 111   1        unsigned char code *pCode;
- 112   1        unsigned char xdata xd_tmp[128];
- 113   1      
- 114   1        set_CHPCON_IAPEN; 
- 115   1        set_IAPUEN_APUEN;
- 116   1      
- 117   1        offset=u16_addr&0x007F;
- 118   1        i = PAGE_SIZE - offset;
- 119   1        if(num>i)num=i;
- 120   1        pCode = (unsigned char code *)u16_addr;
- 121   1        for(i=0;i<num;i++)
- 122   1        {
- 123   2          if(pCode[i]!=0xFF)break;
- 124   2        }
- 125   1        if(i==num)
- 126   1        {
- 127   2          IAPCN =BYTE_PROGRAM_APROM;
- 128   2          IAPAL = u16_addr;
- 129   2          IAPAH = u16_addr>>8;
- 130   2          for(i=0;i<num;i++)
- 131   2          {
- 132   3            IAPFD = pDat[i];
- 133   3            set_IAPTRG_IAPGO;
- 134   3            IAPAL++;
- 135   3          }
- 136   2          for(i=0;i<num;i++)
- 137   2          {
- 138   3            if(pCode[i]!=pDat[i])break;
- 139   3          }
- 140   2          if(i!=num) goto WriteDataToPage20;
- 141   2        }
- 142   1        else
- 143   1        {
- 144   2          WriteDataToPage20:
- 145   2          pCode = (unsigned char code *)(u16_addr&0xff80);
- 146   2          for(i=0;i<128;i++)
- 147   2          {
- 148   3            xd_tmp[i] = pCode[i];
- 149   3          }
- 150   2          for(i=0;i<num;i++)
- 151   2          {
- 152   3            xd_tmp[offset+i] = pDat[i];
- 153   3          }
- 154   2          do
- 155   2          {
- 156   3            IAPAL = (u16_addr&0xff80);
- 157   3            IAPAH = u16_addr>>8;
- 158   3            IAPCN = PAGE_ERASE_APROM;
- 159   3            IAPFD = 0xFF;  
- 160   3            set_IAPTRG_IAPGO; 
- 161   3            IAPCN =BYTE_PROGRAM_APROM;
- 162   3            for(i=0;i<128;i++)
- 163   3            {
- 164   4              IAPFD = xd_tmp[i];
- 165   4              set_IAPTRG_IAPGO;
- 166   4              IAPAL++;
- 167   4            }
-C51 COMPILER V9.56.0.0   EEPROM                                                            12/27/2022 20:22:19 PAGE 4   
+ 109          unsigned char WriteDataToOnePage(unsigned int u16_addr,const unsigned char *pDat,unsigned char num)
+ 110          {
+ 111   1        unsigned char i,offset;
+ 112   1        unsigned char code *pCode;
+ 113   1        unsigned char xdata xd_tmp[128];
+ 114   1      
+ 115   1        set_CHPCON_IAPEN; 
+ 116   1        set_IAPUEN_APUEN;
+ 117   1      
+ 118   1        offset=u16_addr&0x007F;
+ 119   1        i = PAGE_SIZE - offset;
+ 120   1        
+ 121   1        if(num>i)num=i;
+ 122   1        pCode = (unsigned char code *)u16_addr;
+ 123   1        for(i=0;i<num;i++)
+ 124   1        {
+ 125   2          if(pCode[i]!=0xFF)break;
+ 126   2        }
+ 127   1        if(i==num)
+ 128   1        {
+ 129   2          IAPCN =BYTE_PROGRAM_APROM;
+ 130   2          IAPAL = u16_addr;
+ 131   2          IAPAH = u16_addr>>8;
+ 132   2          for(i=0;i<num;i++)
+ 133   2          {
+ 134   3            IAPFD = pDat[i];
+ 135   3            set_IAPTRG_IAPGO;
+ 136   3            IAPAL++;
+ 137   3          }
+ 138   2          for(i=0;i<num;i++)
+ 139   2          {
+ 140   3            if(pCode[i]!=pDat[i])break;
+ 141   3          }
+ 142   2          if(i!=num) goto WriteDataToPage20;
+ 143   2        }
+ 144   1        else
+ 145   1        {
+ 146   2          WriteDataToPage20:
+ 147   2          pCode = (unsigned char code *)(u16_addr&0xff80);
+ 148   2          for(i=0;i<128;i++)
+ 149   2          {
+ 150   3            xd_tmp[i] = pCode[i];
+ 151   3          }
+ 152   2          for(i=0;i<num;i++)
+ 153   2          {
+ 154   3            xd_tmp[offset+i] = pDat[i];
+ 155   3          }
+ 156   2          do
+ 157   2          {
+ 158   3            IAPAL = (u16_addr&0xff80);
+ 159   3            IAPAH = u16_addr>>8;
+ 160   3            IAPCN = PAGE_ERASE_APROM;
+ 161   3            IAPFD = 0xFF;  
+ 162   3            set_IAPTRG_IAPGO; 
+ 163   3            IAPCN =BYTE_PROGRAM_APROM;
+ 164   3            for(i=0;i<128;i++)
+ 165   3            {
+ 166   4              IAPFD = xd_tmp[i];
+ 167   4              set_IAPTRG_IAPGO;
+C51 COMPILER V9.56.0.0   EEPROM                                                            03/04/2023 14:59:25 PAGE 4   
 
- 168   3            for(i=0;i<128;i++)
- 169   3            {
- 170   4              if(pCode[i]!=xd_tmp[i])break;
- 171   4            }
- 172   3          }while(i!=128);
- 173   2          
- 174   2        }
- 175   1        clr_CHPCON_IAPEN;
- 176   1        
- 177   1        return num;
- 178   1      }
+ 168   4              IAPAL++;
+ 169   4            }
+ 170   3            for(i=0;i<128;i++)
+ 171   3            {
+ 172   4              if(pCode[i]!=xd_tmp[i])break;
+ 173   4            }
+ 174   3          }while(i!=128);
+ 175   2          
+ 176   2        }
+ 177   1        clr_CHPCON_IAPEN;
+ 178   1        
+ 179   1        return num;
+ 180   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

@@ -44,7 +44,8 @@ void Write_DATAFLASH_BYTE(unsigned int u16EPAddr,unsigned char u8EPData)
 //Check page start address
   u16_addrl_r=(u16EPAddr/128)*128;
 //Save APROM data to XRAM0
-  for(looptmp=0;looptmp<0x80;looptmp++)
+	
+  for(looptmp=0;looptmp<0x80;looptmp++)//0x80 = 128
   {
     RAMtmp = Read_APROM_BYTE((unsigned int code *)(u16_addrl_r+looptmp));
     page_buffer[looptmp]=RAMtmp;
@@ -116,6 +117,7 @@ unsigned char WriteDataToOnePage(unsigned int u16_addr,const unsigned char *pDat
 
   offset=u16_addr&0x007F;
   i = PAGE_SIZE - offset;
+	
   if(num>i)num=i;
   pCode = (unsigned char code *)u16_addr;
   for(i=0;i<num;i++)

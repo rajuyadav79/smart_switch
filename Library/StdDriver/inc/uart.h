@@ -10,3 +10,6 @@ unsigned char Receive_Data(unsigned char UARTPort);
 
 extern   bit PRINTFG,uart0_receive_flag,uart1_receive_flag;
 extern   unsigned char uart0_receive_data,uart1_receive_data;
+
+extern unsigned char tx_buffer[12],tx_len,tx_length;
+
